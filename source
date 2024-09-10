@@ -1477,7 +1477,7 @@ function OrionLib:MakeWindow(WindowConfig)
 					Visible = false,
 					Image = "rbxassetid://4155801252"
 				}, {
-					Create("UICorner", {CornerRadius = UDim.new(0, 1)}),
+					Create("UICorner", {CornerRadius = UDim.new(0, 0)}),
 					ColorSelection
 				})
 
