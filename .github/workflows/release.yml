@@ -36,7 +36,7 @@ jobs:
               run: |
                   encoded_content=$(base64 -w 0 flamereon.lua)
                   echo "Sending POST request with encoded content"
-                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                  curl -X POST https://lncvrt.xyz/api/gptware/update-script \
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
                     -H "Type: flamreon" \
