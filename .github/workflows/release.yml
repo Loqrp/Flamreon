@@ -1,0 +1,44 @@
+name: Release GPTWare
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "source"
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        if: contains(github.event.head_commit.message, 'source')
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Get commit ID
+              id: get_commit_id
+              run: echo "commit_id=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+            - name: Check if main script exists
+              id: check_file
+              run: |
+                  if [ -f "source" ]; then
+                    echo "Main Script exists"
+                    echo "main_script_exists=true" >> $GITHUB_ENV
+                  else
+                    echo "Main Script does not exist"
+                    exit 1
+                  fi
+
+            - name: Send data to server
+              if: env.main_script_exists == 'true'
+              run: |
+                  encoded_content=$(base64 -w 0 source)
+                  echo "Sending POST request with encoded content"
+                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                    -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
+                    -H "Content-Type: application/json" \
+                    -H "Type: flamreon" \
+                    -H "Commit: ${{ env.commit_id }}" \
+                    -d "{\"content\":\"$encoded_content\"}"
